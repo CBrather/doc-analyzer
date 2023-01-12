@@ -88,6 +88,16 @@ spec:
                 configMapKeyRef:
                   name: {{ .Values.serviceName }}
                   key: AUTH_AUDIENCE
+            - name: OTEL_EXPORTER_INSECURE_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.serviceName }}
+                  key: OTEL_EXPORTER_INSECURE_MODE
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.serviceName }}
+                  key: OTEL_EXPORTER_OTLP_ENDPOINT
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
