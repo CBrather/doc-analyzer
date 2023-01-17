@@ -13,6 +13,8 @@ variables:
     value: not-set
   - name: ImageTag
     value: '0.0.0-0'
+  - name: shouldPushArtifacts
+    value: in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')
 
 pool:
   vmImage: "ubuntu-latest"
@@ -71,10 +73,12 @@ steps:
       export SERVICE_VERSION=$(awk '$1 == "appVersion:" {print substr($2, 2, length($2)-2)}' < $(System.DefaultWorkingDirectory)/deployment/helm/Chart.yaml)
       echo "##vso[task.setvariable variable=ImageTag]$SERVICE_VERSION-$(Build.BuildId)"
     displayName: Generate ImageTag from Helm Chart's appVersion
+    condition: and(succeeded(), eq(variables.shouldPushArtifacts, 'True'))
 
   - script: |
       sed -i 's/"\[\[IMAGE_TAG\]\]"/$(ImageTag)/' $(System.DefaultWorkingDirectory)/deployment/helm/values.yaml
     displayName: Overwrite image tag in Helm Chart
+    condition: and(succeeded(), eq(variables.shouldPushArtifacts, 'True'))
 
   - task: Docker@2
     inputs:
@@ -83,9 +87,13 @@ steps:
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       tags: $(ImageTag)
+    displayName: Build and Push a new Docker Image
+    condition: and(succeeded(), eq(variables.shouldPushArtifacts, 'True'))
 
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(System.DefaultWorkingDirectory)/deployment/helm'
       artifact: 'helm-chart'
       publishLocation: 'pipeline'
+    displayName: Publish Updated Helm Chart to Build Artifacts
+    condition: and(succeeded(), eq(variables.shouldPushArtifacts, 'True'))
