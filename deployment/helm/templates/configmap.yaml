@@ -16,3 +16,4 @@ data:
   DB_SSLMODE: '{{ .Values.db.sslmode }}'
   OTEL_EXPORTER_INSECURE_MODE: '{{ .Values.otel.exporter.insecureMode }}'
   OTEL_EXPORTER_OTLP_ENDPOINT: '{{ .Values.otel.exporter.otlpEndpoint }}'
+  LOGLEVEL: '{{ .Values.loglevel }}'

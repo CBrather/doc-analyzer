@@ -2,9 +2,8 @@ package telemetry
 
 import (
 	"context"
-	"os"
-	"strings"
 
+	"github.com/CBrather/go-auth/internal/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -17,14 +16,14 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-func InitTracer() func(context.Context) error {
-	securityOption := getGrpcSecurityOption()
+func InitTracer(config *config.AppConfig) func(context.Context) error {
+	securityOption := getGrpcSecurityOption(config)
 
 	exporter, err := otlptrace.New(
 		context.Background(),
 		otlptracegrpc.NewClient(
 			securityOption,
-			otlptracegrpc.WithEndpoint(os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")),
+			otlptracegrpc.WithEndpoint(config.OTelExporter.OTLPEndpoint),
 		),
 	)
 
@@ -58,10 +57,10 @@ func InitTracer() func(context.Context) error {
 	return exporter.Shutdown
 }
 
-func getGrpcSecurityOption() otlptracegrpc.Option {
-	exportInsecure := os.Getenv("OTEL_EXPORTER_INSECURE_MODE")
+func getGrpcSecurityOption(config *config.AppConfig) otlptracegrpc.Option {
+	exportInsecure := config.OTelExporter.InsecureMode
 
-	if strings.ToLower(exportInsecure) == "true" {
+	if exportInsecure {
 		return otlptracegrpc.WithInsecure()
 	}
 

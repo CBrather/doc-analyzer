@@ -27,6 +27,7 @@ otel:
   exporter:
     insecureMode: true
     otlpEndpoint: grafana-agent-traces.telemetry:4317
+loglevel: debug
 
 nameOverride: ""
 fullnameOverride: ""

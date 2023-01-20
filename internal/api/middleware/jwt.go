@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 
@@ -13,6 +12,8 @@ import (
 	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"go.uber.org/zap"
+
+	"github.com/CBrather/go-auth/internal/config"
 )
 
 type CustomClaims struct {
@@ -35,8 +36,8 @@ func (c CustomClaims) HasScope(expectedScope string) bool {
 	return false
 }
 
-func EnsureValidToken() func(next http.Handler) http.Handler {
-	issuerURL, err := url.Parse(os.Getenv("AUTH_DOMAIN"))
+func EnsureValidToken(config *config.AppConfig) func(next http.Handler) http.Handler {
+	issuerURL, err := url.Parse(config.Auth.Domain)
 	if err != nil {
 		zap.L().Fatal("Failed to parse the issuer url: %v", zap.Error(err))
 	}
@@ -47,7 +48,7 @@ func EnsureValidToken() func(next http.Handler) http.Handler {
 		provider.KeyFunc,
 		validator.RS256,
 		issuerURL.String(),
-		[]string{os.Getenv("AUTH_AUDIENCE")},
+		[]string{config.Auth.Audience},
 		validator.WithCustomClaims(
 			func() validator.CustomClaims {
 				return &CustomClaims{}
