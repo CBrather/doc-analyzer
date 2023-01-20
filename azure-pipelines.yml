@@ -14,7 +14,7 @@ variables:
   - name: ImageTag
     value: '0.0.0-0'
   - name: shouldPushArtifacts
-    value: $[and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))]
+    value: $[and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))]
 
 pool:
   vmImage: "ubuntu-latest"
