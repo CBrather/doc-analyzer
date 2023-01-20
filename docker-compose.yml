@@ -20,9 +20,15 @@ services:
     depends_on:
       - db
     environment:
-      - DB_CONNECTION_STRING=host=db port=5432 dbname=recordings user=postgres password=postgres sslmode=disable
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=recordings
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_SSLMODE=disable
       - AUTH_DOMAIN=https://dev-cebear.eu.auth0.com/
       - AUTH_AUDIENCE=http://localhost:8080
+      - LOGLEVEL=debug
     networks:
       - go-auth
 
