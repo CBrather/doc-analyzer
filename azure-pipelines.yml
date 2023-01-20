@@ -25,6 +25,11 @@ steps:
     persistCredentials: true
     displayName: checkout project
 
+  - script: |
+      echo 'shouldPushArtifacts = $(shouldPushArtifacts)'
+      echo 'Build.Reason = $(Build.Reason)'
+      echo 'Build.SourceBranch = $(Build.SourceBranch)'
+
   - task: GoTool@0
     inputs:
       version: "1.18"
