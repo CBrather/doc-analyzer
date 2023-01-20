@@ -15,13 +15,16 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/CBrather/go-auth/internal/api"
+	"github.com/CBrather/go-auth/internal/config"
 	"github.com/CBrather/go-auth/pkg/telemetry"
 )
 
 func SetupHttpRoutes(db *sql.DB) {
 	logger := httplog.NewLogger("go-auth", httplog.Options{JSON: true, Concise: true})
 
-	traceShutdown := telemetry.InitTracer()
+	config := config.GetEnvironment()
+
+	traceShutdown := telemetry.InitTracer(config)
 	defer traceShutdown(context.Background())
 
 	router := chi.NewRouter()

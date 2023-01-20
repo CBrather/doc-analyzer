@@ -13,16 +13,19 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/CBrather/go-auth/internal/api/middleware"
+	"github.com/CBrather/go-auth/internal/config"
 	"github.com/CBrather/go-auth/internal/repositories/album"
 )
 
 var db *sql.DB
 
 func SetupAlbumRoutes(rootRouter *chi.Mux, newDb *sql.DB) {
+	config := config.GetEnvironment()
+
 	db = newDb
 
 	albumRouter := chi.NewRouter()
-	albumRouter.Use(middleware.EnsureValidToken())
+	albumRouter.Use(middleware.EnsureValidToken(config))
 
 	albumRouter.With(middleware.RequireScope("read:albums")).Get("/{id}", getAlbum)
 	albumRouter.With(middleware.RequireScope("read:albums")).Get("/", listAlbums)
