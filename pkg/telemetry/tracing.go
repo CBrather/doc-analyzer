@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-func InitTracer(config *config.AppConfig) func(context.Context) error {
+func InitTracer(config *config.EnvConfig) func(context.Context) error {
 	securityOption := getGrpcSecurityOption(config)
 
 	exporter, err := otlptrace.New(
@@ -57,7 +57,7 @@ func InitTracer(config *config.AppConfig) func(context.Context) error {
 	return exporter.Shutdown
 }
 
-func getGrpcSecurityOption(config *config.AppConfig) otlptracegrpc.Option {
+func getGrpcSecurityOption(config *config.EnvConfig) otlptracegrpc.Option {
 	exportInsecure := config.OTelExporter.InsecureMode
 
 	if exportInsecure {

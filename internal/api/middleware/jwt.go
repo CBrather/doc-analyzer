@@ -36,7 +36,7 @@ func (c CustomClaims) HasScope(expectedScope string) bool {
 	return false
 }
 
-func EnsureValidToken(config *config.AppConfig) func(next http.Handler) http.Handler {
+func EnsureValidToken(config *config.EnvConfig) func(next http.Handler) http.Handler {
 	issuerURL, err := url.Parse(config.Auth.Domain)
 	if err != nil {
 		zap.L().Fatal("Failed to parse the issuer url: %v", zap.Error(err))

@@ -23,7 +23,8 @@ func main() {
 
 	db, err := sql.Open("postgres", fmt.Sprintf(
 		"host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",
-		env.Database.Host, env.Database.Port, env.Database.Name, env.Database.User, env.Database.Password, env.Database.SslMode))
+		env.Database.Host, env.Database.Port, env.Database.Name, env.Database.User, env.Database.Password, env.Database.SslMode,
+	))
 
 	if err != nil {
 		zap.L().Fatal("Unable to open a Postgres connection", zap.Error(err))
