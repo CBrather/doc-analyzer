@@ -28,7 +28,12 @@ func TestShouldAddAlbum(t *testing.T) {
 	expectedQueryRows := sqlmock.NewRows([]string{"id", "title", "artist", "price"}).AddRow("1", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
 	mock.ExpectQuery("SELECT \\* FROM album WHERE id \\= \\$1").WithArgs(1).WillReturnRows(expectedQueryRows)
 
-	addedAlbum, err := album.Add(db, newAlbum)
+	repo, err := album.NewRepository(db)
+	if err != nil {
+		t.Errorf("Unexpected error creating an album repository: %v", err)
+	}
+
+	addedAlbum, err := repo.Add(newAlbum)
 	if err != nil {
 		t.Errorf("Unexpected error testing album.Add: %v", err)
 	}

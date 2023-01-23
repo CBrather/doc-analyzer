@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"net/http"
 
 	_ "github.com/lib/pq"
@@ -19,7 +18,7 @@ import (
 	"github.com/CBrather/go-auth/pkg/telemetry"
 )
 
-func SetupHttpRoutes(db *sql.DB) {
+func SetupHttpRoutes() {
 	logger := httplog.NewLogger("go-auth", httplog.Options{JSON: true, Concise: true})
 
 	config := config.GetEnvironment()
@@ -38,7 +37,7 @@ func SetupHttpRoutes(db *sql.DB) {
 	router.Handle("/metrics", telemetry.NewMetricsHandler())
 	api.SetupProbeRoutes(router)
 
-	api.SetupAlbumRoutes(router, db)
+	api.SetupAlbumRoutes(router)
 
 	zap.L().Info("Server listening on :8080")
 	http.ListenAndServe("0.0.0.0:8080", router)
