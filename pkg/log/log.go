@@ -7,8 +7,21 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func Initialize(logLevel string) error {
-	parsedLevel, err := zapcore.ParseLevel(logLevel)
+// Initialized the global logger with custom field formats and the given log level
+func Initialize(level string) error {
+	logger, err := GetLoggerWithLevel(level)
+	if err != nil {
+		zap.L().Fatal("Failed to initialize the global logger", zap.Error(err))
+	}
+
+	zap.ReplaceGlobals(logger)
+
+	return nil
+}
+
+// Returns a new logger with custom field formats and the given log level (Only to be used when the global one cannot)
+func GetLoggerWithLevel(level string) (*zap.Logger, error) {
+	parsedLevel, err := zapcore.ParseLevel(level)
 	if err != nil {
 		parsedLevel = zap.InfoLevel
 	}
@@ -20,12 +33,10 @@ func Initialize(logLevel string) error {
 
 	logger, err := config.Build()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	zap.ReplaceGlobals(logger)
-
-	return nil
+	return logger, nil
 }
 
 func setEncoderConfig(cfg *zap.Config) {
