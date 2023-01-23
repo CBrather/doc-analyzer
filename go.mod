@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/XSAM/otelsql v0.17.1
 	github.com/auth0/go-jwt-middleware/v2 v2.0.1
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/httplog v0.2.5
@@ -39,6 +40,7 @@ require (
 	github.com/rs/zerolog v1.27.0 // indirect
 	go.opentelemetry.io/contrib v1.0.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.11.2 // indirect
+	go.opentelemetry.io/otel/metric v0.34.0 // indirect
 	go.opentelemetry.io/otel/trace v1.11.2 // indirect
 	go.opentelemetry.io/proto/otlp v0.19.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
