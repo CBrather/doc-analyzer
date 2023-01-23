@@ -14,21 +14,29 @@ type Album struct {
 	Price  float64 `json:"price"`
 }
 
-func Add(db *sql.DB, newAlbum Album) (Album, error) {
-	insertRow := db.QueryRow("INSERT INTO album (title, artist, price) VALUES ($1, $2, $3) RETURNING id", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
+type AlbumRepository struct {
+	DB *sql.DB
+}
+
+func NewRepository(db *sql.DB) (*AlbumRepository, error) {
+	return &AlbumRepository{DB: db}, nil
+}
+
+func (r *AlbumRepository) Add(newAlbum Album) (Album, error) {
+	insertRow := r.DB.QueryRow("INSERT INTO album (title, artist, price) VALUES ($1, $2, $3) RETURNING id", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
 
 	var id int64
 	if err := insertRow.Scan(&id); err != nil {
 		return Album{}, fmt.Errorf("Album :: Add :: Insertion: %v", err)
 	}
 
-	return GetByID(db, id)
+	return r.GetByID(id)
 }
 
-func GetByID(db *sql.DB, id int64) (Album, error) {
+func (r *AlbumRepository) GetByID(id int64) (Album, error) {
 	var alb Album
 
-	row := db.QueryRow("SELECT * FROM album WHERE id = $1", id)
+	row := r.DB.QueryRow("SELECT * FROM album WHERE id = $1", id)
 
 	if err := row.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
 		if err == sql.ErrNoRows {
@@ -41,10 +49,10 @@ func GetByID(db *sql.DB, id int64) (Album, error) {
 	return alb, nil
 }
 
-func List(db *sql.DB) ([]Album, error) {
+func (r *AlbumRepository) List() ([]Album, error) {
 	var albums []Album
 
-	rows, err := db.Query("SELECT * FROM album")
+	rows, err := r.DB.Query("SELECT * FROM album")
 	if err != nil {
 		zap.L().Error("Album Repository :: Querying all albums from the database failed", zap.Error(err))
 	}
@@ -68,10 +76,10 @@ func List(db *sql.DB) ([]Album, error) {
 	return albums, nil
 }
 
-func ListByArtist(db *sql.DB, name string) ([]Album, error) {
+func (r *AlbumRepository) ListByArtist(name string) ([]Album, error) {
 	var albums []Album
 
-	rows, err := db.Query("SELECT * FROM album WHERE artist = $1", name)
+	rows, err := r.DB.Query("SELECT * FROM album WHERE artist = $1", name)
 	if err != nil {
 		return nil, err
 	}
