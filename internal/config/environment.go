@@ -8,9 +8,9 @@ import (
 	"github.com/CBrather/go-auth/pkg/log"
 )
 
-var env *AppConfig = nil
+var env *EnvConfig = nil
 
-func GetEnvironment() *AppConfig {
+func GetEnvironment() *EnvConfig {
 	if env == nil {
 		initConfig()
 	}
@@ -30,14 +30,14 @@ func initConfig() {
 		logger.Info("Unable to load a .env file, will execute with environment as-is", zap.Error(err))
 	}
 
-	env = new(AppConfig)
+	env = new(EnvConfig)
 
 	if err = envconfig.Init(env); err != nil {
 		logger.Fatal("Failed initializing the app config", zap.Error(err))
 	}
 }
 
-type AppConfig struct {
+type EnvConfig struct {
 	Auth struct {
 		Domain   string `envconfig:"AUTH_DOMAIN"`
 		Audience string `envconfig:"AUTH_AUDIENCE"`
