@@ -29,6 +29,42 @@ services:
       - AUTH_DOMAIN=https://dev-cebear.eu.auth0.com/
       - AUTH_AUDIENCE=http://localhost:8080
       - LOGLEVEL=debug
+      - OTEL_EXPORTER_INSECURE_MODE=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=grafana-agent:4317
+    networks:
+      - go-auth
+
+  grafana-agent:
+    image: grafana/agent:latest
+    volumes:
+      - ./deployment/docker-compose/grafana-agent:/etc/agent-config
+    entrypoint:
+      - /bin/agent
+      - -config.file=/etc/agent-config/agent.yaml
+      - -metrics.wal-directory=/tmp/agent/wal
+      - -enable-features=integrations-next
+      - -config.expand-env
+      - -config.enable-read-api
+    environment:
+      HOSTNAME: grafana-agent
+      TEMPO_HOST: tempo:4317
+    ports:
+      - "12345:12345"
+    networks:
+      - go-auth
+
+  tempo:
+    image: grafana/tempo:1.5.0
+    command:
+      - "-search.enabled=true"
+      - "-storage.trace.backend=local"                  # tell tempo where to permanently put traces
+      - "-storage.trace.local.path=/tmp/tempo/traces"
+      - "-storage.trace.wal.path=/tmp/tempo/wal"        # tell tempo where to store the wal
+      - "-auth.enabled=false"                           # disables the requirement for the X-Scope-OrgID header
+      - "-server.http-listen-port=3200"
+    ports:
+      - "3200:3200"
+      - "4317:4317"
     networks:
       - go-auth
 
