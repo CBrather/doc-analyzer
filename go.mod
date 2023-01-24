@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/XSAM/otelsql v0.17.1
 	github.com/auth0/go-jwt-middleware/v2 v2.0.1
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/httplog v0.2.5
@@ -12,6 +11,7 @@ require (
 	github.com/lib/pq v1.10.7
 	github.com/prometheus/client_golang v1.14.0
 	github.com/riandyrn/otelchi v0.5.0
+	github.com/uptrace/opentelemetry-go-extra/otelsql v0.1.18
 	github.com/vrischmann/envconfig v1.3.0
 	go.opentelemetry.io/otel v1.11.2
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.11.2

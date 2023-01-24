@@ -1,6 +1,7 @@
 package album
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -22,21 +23,21 @@ func NewRepository(db *sql.DB) (*AlbumRepository, error) {
 	return &AlbumRepository{DB: db}, nil
 }
 
-func (r *AlbumRepository) Add(newAlbum Album) (Album, error) {
-	insertRow := r.DB.QueryRow("INSERT INTO album (title, artist, price) VALUES ($1, $2, $3) RETURNING id", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
+func (r *AlbumRepository) Add(ctx context.Context, newAlbum Album) (Album, error) {
+	insertRow := r.DB.QueryRowContext(ctx, "INSERT INTO album (title, artist, price) VALUES ($1, $2, $3) RETURNING id", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
 
 	var id int64
 	if err := insertRow.Scan(&id); err != nil {
 		return Album{}, fmt.Errorf("Album :: Add :: Insertion: %v", err)
 	}
 
-	return r.GetByID(id)
+	return r.GetByID(ctx, id)
 }
 
-func (r *AlbumRepository) GetByID(id int64) (Album, error) {
+func (r *AlbumRepository) GetByID(ctx context.Context, id int64) (Album, error) {
 	var alb Album
 
-	row := r.DB.QueryRow("SELECT * FROM album WHERE id = $1", id)
+	row := r.DB.QueryRowContext(ctx, "SELECT * FROM album WHERE id = $1", id)
 
 	if err := row.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
 		if err == sql.ErrNoRows {
@@ -49,10 +50,10 @@ func (r *AlbumRepository) GetByID(id int64) (Album, error) {
 	return alb, nil
 }
 
-func (r *AlbumRepository) List() ([]Album, error) {
+func (r *AlbumRepository) List(ctx context.Context) ([]Album, error) {
 	var albums []Album
 
-	rows, err := r.DB.Query("SELECT * FROM album")
+	rows, err := r.DB.QueryContext(ctx, "SELECT * FROM album")
 	if err != nil {
 		zap.L().Error("Album Repository :: Querying all albums from the database failed", zap.Error(err))
 	}
@@ -76,10 +77,10 @@ func (r *AlbumRepository) List() ([]Album, error) {
 	return albums, nil
 }
 
-func (r *AlbumRepository) ListByArtist(name string) ([]Album, error) {
+func (r *AlbumRepository) ListByArtist(ctx context.Context, name string) ([]Album, error) {
 	var albums []Album
 
-	rows, err := r.DB.Query("SELECT * FROM album WHERE artist = $1", name)
+	rows, err := r.DB.QueryContext(ctx, "SELECT * FROM album WHERE artist = $1", name)
 	if err != nil {
 		return nil, err
 	}
