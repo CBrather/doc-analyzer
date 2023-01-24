@@ -13,8 +13,9 @@ variables:
     value: not-set
   - name: ImageTag
     value: '0.0.0-0'
+  # Fix to true for now until we've got a better setup for a test environment
   - name: shouldPushArtifacts
-    value: $[and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))]
+    value: 'true' #$[and(in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))]
 
 pool:
   vmImage: "ubuntu-latest"
