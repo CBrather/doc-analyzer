@@ -21,7 +21,7 @@ func GetDB() (*sql.DB, error) {
 
 	env := config.GetEnvironment()
 
-	db, err := otelsql.Open("postgres", buildConnectionString(env), otelsql.WithAttributes(
+	db, err := otelsql.Open("postgres", buildConnectionString(env), otelsql.WithSQLCommenter(true), otelsql.WithAttributes(
 		semconv.DBSystemPostgreSQL,
 		semconv.DBNameKey.String(env.Database.Name),
 	))
