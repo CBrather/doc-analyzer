@@ -19,8 +19,11 @@ func GetDB() (*sql.DB, error) {
 		return db, nil
 	}
 
-	db, err := otelsql.Open("postgres", buildConnectionString(), otelsql.WithAttributes(
+	env := config.GetEnvironment()
+
+	db, err := otelsql.Open("postgres", buildConnectionString(env), otelsql.WithAttributes(
 		semconv.DBSystemPostgreSQL,
+		semconv.DBNameKey.String(env.Database.Name),
 	))
 	if err != nil {
 		return nil, err
@@ -37,9 +40,7 @@ func GetDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func buildConnectionString() string {
-	env := config.GetEnvironment()
-
+func buildConnectionString(env *config.EnvConfig) string {
 	connectionString := fmt.Sprintf(
 		"host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",
 		env.Database.Host, env.Database.Port, env.Database.Name, env.Database.User, env.Database.Password, env.Database.SslMode,
