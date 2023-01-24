@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/XSAM/otelsql"
 	_ "github.com/lib/pq"
+	"github.com/uptrace/opentelemetry-go-extra/otelsql"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
 
 	"github.com/CBrather/go-auth/internal/config"
@@ -21,7 +21,7 @@ func GetDB() (*sql.DB, error) {
 
 	env := config.GetEnvironment()
 
-	db, err := otelsql.Open("postgres", buildConnectionString(env), otelsql.WithSQLCommenter(true), otelsql.WithAttributes(
+	db, err := otelsql.Open("postgres", buildConnectionString(env), otelsql.WithAttributes(
 		semconv.DBSystemPostgreSQL,
 		semconv.DBNameKey.String(env.Database.Name),
 	))
@@ -33,9 +33,7 @@ func GetDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	if err = otelsql.RegisterDBStatsMetrics(db, otelsql.WithAttributes(semconv.DBSystemPostgreSQL)); err != nil {
-		return nil, err
-	}
+	otelsql.ReportDBStatsMetrics(db, otelsql.WithAttributes(semconv.DBSystemPostgreSQL))
 
 	return db, nil
 }

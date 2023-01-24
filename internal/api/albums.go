@@ -42,7 +42,7 @@ func SetupAlbumRoutes(rootRouter *chi.Mux) {
 
 func listAlbums(repo *album.AlbumRepository) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		albums, err := repo.List()
+		albums, err := repo.List(req.Context())
 		if err != nil {
 			zap.L().Error("Failed to retrieve the list of albums.", zap.Error(err))
 
@@ -76,7 +76,7 @@ func getAlbum(repo *album.AlbumRepository) http.HandlerFunc {
 		}
 
 		id64 := int64(id)
-		album, err := repo.GetByID(id64)
+		album, err := repo.GetByID(req.Context(), id64)
 
 		if err != nil {
 			http.Error(w, "No album with that id was found", http.StatusNotFound)
@@ -116,7 +116,7 @@ func postAlbum(repo *album.AlbumRepository) http.HandlerFunc {
 			return
 		}
 
-		addedAlbum, err := repo.Add(newAlbum)
+		addedAlbum, err := repo.Add(req.Context(), newAlbum)
 		if err != nil {
 			zap.L().Error("Failed to save new album", zap.Error(err))
 			zap.L().Debug("Failed to save new album", zap.Any("struct", newAlbum))
