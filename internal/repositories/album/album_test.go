@@ -1,6 +1,7 @@
 package album_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -33,7 +34,7 @@ func TestShouldAddAlbum(t *testing.T) {
 		t.Errorf("Unexpected error creating an album repository: %v", err)
 	}
 
-	addedAlbum, err := repo.Add(newAlbum)
+	addedAlbum, err := repo.Add(context.Background(), newAlbum)
 	if err != nil {
 		t.Errorf("Unexpected error testing album.Add: %v", err)
 	}
