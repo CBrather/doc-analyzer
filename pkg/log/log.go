@@ -3,11 +3,13 @@ package log
 import (
 	"time"
 
+	"github.com/go-logr/zapr"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-// Initialized the global logger with custom field formats and the given log level
+// Initializes the global logger and other lib-specific loggers with custom field formats and the given log level
 func Initialize(level string) error {
 	logger, err := GetLoggerWithLevel(level)
 	if err != nil {
@@ -15,6 +17,9 @@ func Initialize(level string) error {
 	}
 
 	zap.ReplaceGlobals(logger)
+
+	otelLogger := zapr.NewLogger(logger)
+	otel.SetLogger(otelLogger)
 
 	return nil
 }
