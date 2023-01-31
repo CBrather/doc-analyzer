@@ -9,7 +9,21 @@ services:
     ports:
       - 5432:5432
     networks:
-      - go-auth
+      - analyzer
+
+  analyzer-migration:
+    image: migrate/migrate
+    command:
+      - "-path=./migrations/"
+      - "-database=postgres://postgres:postgres@db:5432/analyzer?sslmode=disable"
+      - "up"
+    restart: on-failure
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      - db
+    networks:
+      - analyzer
 
   go-auth:
     build:
@@ -32,7 +46,7 @@ services:
       - OTEL_EXPORTER_INSECURE_MODE=true
       - OTEL_EXPORTER_OTLP_ENDPOINT=grafana-agent:4317
     networks:
-      - go-auth
+      - analyzer
 
   grafana-agent:
     image: grafana/agent:latest
@@ -51,7 +65,7 @@ services:
     ports:
       - "12345:12345"
     networks:
-      - go-auth
+      - analyzer
 
   tempo:
     image: grafana/tempo:1.5.0
@@ -66,8 +80,8 @@ services:
       - "3200:3200"
       - "4317:4317"
     networks:
-      - go-auth
+      - analyzer
 
 networks:
-  go-auth:
+  analyzer:
     driver: bridge
