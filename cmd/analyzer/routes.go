@@ -13,13 +13,13 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/CBrather/go-auth/internal/api"
-	"github.com/CBrather/go-auth/internal/config"
-	"github.com/CBrather/go-auth/pkg/telemetry"
+	"github.com/CBrather/analyzer/internal/api"
+	"github.com/CBrather/analyzer/internal/config"
+	"github.com/CBrather/analyzer/pkg/telemetry"
 )
 
 func SetupHttpRoutes() {
-	logger := httplog.NewLogger("go-auth", httplog.Options{JSON: true, Concise: true})
+	logger := httplog.NewLogger("analyzer", httplog.Options{JSON: true, Concise: true})
 
 	config := config.GetEnvironment()
 
@@ -29,7 +29,7 @@ func SetupHttpRoutes() {
 	router := chi.NewRouter()
 
 	router.Use(
-		otelchi.Middleware("go-auth", otelchi.WithChiRoutes(router)),
+		otelchi.Middleware("analyzer", otelchi.WithChiRoutes(router)),
 		httplog.RequestLogger(logger),
 		middleware.Recoverer,
 	)

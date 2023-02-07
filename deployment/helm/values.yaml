@@ -1,13 +1,13 @@
-# Default values for go-auth.
+# Default values for analyzer.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
-serviceName: go-auth
+serviceName: analyzer
 
 image:
-  repository: cebeardev.azurecr.io/go-auth
+  repository: cebeardev.azurecr.io/analyzer
   pullPolicy: IfNotPresent
 
   # Locally this can be set manually

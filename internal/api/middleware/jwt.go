@@ -13,7 +13,7 @@ import (
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"go.uber.org/zap"
 
-	"github.com/CBrather/go-auth/internal/config"
+	"github.com/CBrather/analyzer/internal/config"
 )
 
 type CustomClaims struct {

@@ -11,10 +11,10 @@ import (
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 
-	"github.com/CBrather/go-auth/internal/api/middleware"
-	"github.com/CBrather/go-auth/internal/config"
-	infra "github.com/CBrather/go-auth/internal/infrastructure"
-	"github.com/CBrather/go-auth/internal/repositories/album"
+	"github.com/CBrather/analyzer/internal/api/middleware"
+	"github.com/CBrather/analyzer/internal/config"
+	infra "github.com/CBrather/analyzer/internal/infrastructure"
+	"github.com/CBrather/analyzer/internal/repositories/album"
 )
 
 func SetupAlbumRoutes(rootRouter *chi.Mux) {
