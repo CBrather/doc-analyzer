@@ -5,8 +5,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/CBrather/go-auth/internal/config"
-	"github.com/CBrather/go-auth/pkg/log"
+	"github.com/CBrather/analyzer/internal/config"
+	"github.com/CBrather/analyzer/pkg/log"
 )
 
 func main() {

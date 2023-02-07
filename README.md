@@ -1,2 +1,3 @@
-# go-auth
-Playing around with OAuth integration in Golang
+# analyzer
+
+Analyzing documents through azure services

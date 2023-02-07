@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: go-auth
+  name: analyzer
   namespace: 'iam'
   annotations:
     'helm.sh/hook': pre-install,pre-upgrade

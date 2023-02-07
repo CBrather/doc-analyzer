@@ -5,7 +5,7 @@ import (
 	"github.com/vrischmann/envconfig"
 	"go.uber.org/zap"
 
-	"github.com/CBrather/go-auth/pkg/log"
+	"github.com/CBrather/analyzer/pkg/log"
 )
 
 var env *EnvConfig = nil

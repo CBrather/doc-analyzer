@@ -3,7 +3,7 @@ package telemetry
 import (
 	"context"
 
-	"github.com/CBrather/go-auth/internal/config"
+	"github.com/CBrather/analyzer/internal/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -34,7 +34,7 @@ func InitTracer(config *config.EnvConfig) func(context.Context) error {
 	resources, err := resource.New(
 		context.Background(),
 		resource.WithAttributes(
-			attribute.String("service.name", "go-auth"),
+			attribute.String("service.name", "analyzer"),
 		),
 	)
 

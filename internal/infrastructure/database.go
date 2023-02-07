@@ -8,7 +8,7 @@ import (
 	"github.com/uptrace/opentelemetry-go-extra/otelsql"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
 
-	"github.com/CBrather/go-auth/internal/config"
+	"github.com/CBrather/analyzer/internal/config"
 )
 
 var db *sql.DB = nil

@@ -6,7 +6,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 
-	"github.com/CBrather/go-auth/internal/repositories/album"
+	"github.com/CBrather/analyzer/internal/repositories/album"
 )
 
 func TestShouldAddAlbum(t *testing.T) {
