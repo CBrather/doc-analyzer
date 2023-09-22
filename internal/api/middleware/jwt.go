@@ -66,7 +66,7 @@ func EnsureValidToken(config *config.EnvConfig) func(next http.Handler) http.Han
 
 		res.Header().Set("Content-Type", "application/json")
 		res.WriteHeader(http.StatusUnauthorized)
-		_ = res.Write([]byte(`{"message":"Failed to validate JWT."}`))
+		_, _ = res.Write([]byte(`{"message":"Failed to validate JWT."}`))
 	}
 
 	middleware := jwtmiddleware.New(
@@ -92,7 +92,7 @@ func RequireScope(requiredScope string) func(next http.Handler) http.Handler {
 				zap.L().Info(fmt.Sprintf("Subject %s is missing a required scope: %s", token.RegisteredClaims.Subject, requiredScope))
 
 				w.WriteHeader(http.StatusForbidden)
-				_ = w.Write([]byte(`{"message":"Insufficient permissions."}`))
+				_, _ = w.Write([]byte(`{"message":"Insufficient permissions."}`))
 
 				return
 			}
