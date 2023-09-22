@@ -34,6 +34,8 @@ release: $(BIN) ; $(info $(M) building linux release...)
 		./cmd/analyzer/;
 
 # Tools
+GOBIN = $(GOPATH)/bin
+
 $(BIN):
 	$Q mkdir -p $@
 
