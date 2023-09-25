@@ -24,7 +24,7 @@ func SetupHttpRoutes() {
 	config := config.GetEnvironment()
 
 	traceShutdown := telemetry.InitTracer(config)
-	defer traceShutdown(context.Background())
+	defer func() { _ = traceShutdown(context.Background()) }()
 
 	router := chi.NewRouter()
 
@@ -40,5 +40,8 @@ func SetupHttpRoutes() {
 	api.SetupAlbumRoutes(router)
 
 	zap.L().Info("Server listening on :8080")
-	http.ListenAndServe("0.0.0.0:8080", router)
+	err := http.ListenAndServe("0.0.0.0:8080", router)
+	if err != nil {
+		zap.L().Fatal("Server threw an error")
+	}
 }

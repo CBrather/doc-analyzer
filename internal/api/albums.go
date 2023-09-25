@@ -61,7 +61,7 @@ func listAlbums(repo *album.AlbumRepository) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(body)
+		_, _ = w.Write(body)
 	}
 }
 
@@ -92,7 +92,7 @@ func getAlbum(repo *album.AlbumRepository) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(body)
+		_, _ = w.Write(body)
 	}
 }
 
@@ -136,6 +136,6 @@ func postAlbum(repo *album.AlbumRepository) http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		w.Write(serializedAlbum)
+		_, _ = w.Write(serializedAlbum)
 	}
 }
