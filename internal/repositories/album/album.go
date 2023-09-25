@@ -23,8 +23,8 @@ func NewRepository(db *sql.DB) (*AlbumRepository, error) {
 	return &AlbumRepository{DB: db}, nil
 }
 
-func (r *AlbumRepository) Add(ctx context.Context, newAlbum Album) (Album, error) {
-	insertRow := r.DB.QueryRowContext(ctx, "INSERT INTO album (title, artist, price) VALUES ($1, $2, $3) RETURNING id", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
+func (r *AlbumRepository) Add(ctx context.Context, query string) (Album, error) {
+	insertRow := r.DB.QueryRowContext(ctx, query)
 
 	var id int64
 	if err := insertRow.Scan(&id); err != nil {
