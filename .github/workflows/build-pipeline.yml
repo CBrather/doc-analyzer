@@ -50,6 +50,12 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_API_TOKEN }}
           run-gosec: true
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
       - name: Build
         run: make release
