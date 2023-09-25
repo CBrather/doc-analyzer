@@ -49,6 +49,7 @@ jobs:
         uses: codacy/codacy-analysis-cli-action@v4.3.0
         with:
           project-token: ${{ secrets.CODACY_API_TOKEN }}
+          run-docker-tools: false
           run-gosec: true
 
       - name: SonarCloud Scan
@@ -60,6 +61,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
       
       - name: Build
         run: make release
