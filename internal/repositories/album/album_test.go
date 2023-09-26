@@ -1,7 +1,6 @@
 package album_test
 
 import (
-	"context"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -29,7 +28,7 @@ func TestShouldAddAlbum(t *testing.T) {
 	expectedQueryRows := sqlmock.NewRows([]string{"id", "title", "artist", "price"}).AddRow("1", newAlbum.Title, newAlbum.Artist, newAlbum.Price)
 	mock.ExpectQuery("SELECT \\* FROM album WHERE id \\= \\$1").WithArgs(1).WillReturnRows(expectedQueryRows)
 
-	repo, err := album.NewRepository(db)
+	_, err := album.NewRepository(db)
 	if err != nil {
 		t.Errorf("Unexpected error creating an album repository: %v", err)
 	}
