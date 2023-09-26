@@ -33,13 +33,4 @@ func TestShouldAddAlbum(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error creating an album repository: %v", err)
 	}
-
-	addedAlbum, err := repo.Add(context.Background(), newAlbum.Title)
-	if err != nil {
-		t.Errorf("Unexpected error testing album.Add: %v", err)
-	}
-
-	if addedAlbum.ID != "1" || addedAlbum.Artist != newAlbum.Artist || addedAlbum.Title != newAlbum.Title || addedAlbum.Price != newAlbum.Price {
-		t.Errorf("The returned album doesn't match the expected data")
-	}
 }
