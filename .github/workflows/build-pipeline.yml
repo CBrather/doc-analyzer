@@ -50,6 +50,21 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_API_TOKEN }}
           run-gosec: true
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2.0.2
+        with:
+          args: >
+            -Dsonar.organization=cbrather
+            -Dsonar.projectKey=CBrather_doc-analyzer
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
       
       - name: Build
         run: make release

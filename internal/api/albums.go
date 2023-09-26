@@ -116,7 +116,7 @@ func postAlbum(repo *album.AlbumRepository) http.HandlerFunc {
 			return
 		}
 
-		addedAlbum, err := repo.Add(req.Context(), newAlbum)
+		addedAlbum, err := repo.Add(req.Context(), newAlbum.Title)
 		if err != nil {
 			zap.L().Error("Failed to save new album", zap.Error(err))
 			zap.L().Debug("Failed to save new album", zap.Any("struct", newAlbum))
