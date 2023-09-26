@@ -49,7 +49,6 @@ jobs:
         uses: codacy/codacy-analysis-cli-action@v4.3.0
         with:
           project-token: ${{ secrets.CODACY_API_TOKEN }}
-          run-docker-tools: false
           run-gosec: true
 
       - name: SonarCloud Scan
